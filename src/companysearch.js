@@ -2,10 +2,13 @@
 import { useEffect, useRef, useState } from "react";
 import { Container, Row, Col, Button, Card } from "react-bootstrap";
 import { Form } from "react-bootstrap";
+import Backdrop from '@mui/material/Backdrop';
+import CircularProgress from '@mui/material/CircularProgress';
 
 function Search() {
   const [data, setData] = useState([]);
   const [search, setSearch] = useState()
+  const [open, setOpen] = useState(false);
   // Google map API Key
   const effectRan = useRef(false);
   useEffect(() => {
@@ -27,6 +30,7 @@ function Search() {
         response.json().then((result) => {
            console.log("search data  "+result);
            setData(result)
+           setOpen(false);
         })
      })
   }, [])
@@ -48,12 +52,11 @@ useEffect(()=>{searchWord()},[])
       lng: parseFloat(data[i].longitude)
     })
   }
-console.log("arryLocation", arryLocation)
+//console.log("arryLocation", arryLocation)
   function searchMark() {
     // The location of Uluru
-    console.log("arryLocation 222", arryLocation)
+   // console.log("arryLocation 222", arryLocation)
     var maks = arryLocation[1];
-
     const uluru = maks;
     // The map, centered at Uluru
     const map = new google.maps.Map(document.getElementById("map"), {
@@ -66,12 +69,39 @@ console.log("arryLocation", arryLocation)
       map: map,
     });
 var marlength = arryLocation.length;
-
+var dataMaps = data.map((row)=>row.id);
+var ids = ["ids38","ids47","ids49","ids62","ids63","ids64","ids65","ids66","ids67","ids68","ids69","ids70","ids71"]
 for(var i = 0; i < marlength; i++){
+ 
+  console.log('arryLocation[i]',arryLocation[i])
   new google.maps.Marker({
     position: arryLocation[i],
-  }).setMap(map);
+   title: data[i].company,
+   map:map
+  }).addListener('click', function(i){
+    for(var d = 0; d < ids.length; d++){
+      //console.log(ids[d]);
+      var cardbox = document.getElementsByClassName("cls");
+      var cls = cardbox[d].classList.contains("border-success");
+      if(cls == true){
+        console.log('cls is tru')
+        document.getElementById(ids[d]).classList.remove("border-success");
+      }else{
+        console.log('cls is false')
+        document.getElementById(ids[d]).classList.add("border-success");
+      }
+     // document.getElementById(ids[0]).classList.add("border-success");
+    }
+alert(ids[i])
+
+
+  });
+
+ // location.push({title: data[i].company,position: new google.maps.LatLng(arryLocation[i].lat,arryLocation[i].lng),map:map, animation: google.maps.Animation.DROP,})
+  
 }
+
+
 
   }
   window.searchMark = searchMark;
@@ -129,8 +159,8 @@ for(var i = 0; i < marlength; i++){
               <Col>
                 <div className="scroll" style={{height: "70vh", overflowX: "scroll"}}>
                 {
-                  data.map((item) =>
-                    <Card className="mt-3">
+                  data.map((item,key) =>
+                    <Card className="mt-3 cls" id={`ids${item.id}`}>
                       <Card.Body>
                         <Card.Title>{item.company}</Card.Title>
                         <Card.Subtitle className="mb-2 text-muted">{item.contactname}</Card.Subtitle>
@@ -172,6 +202,13 @@ for(var i = 0; i < marlength; i++){
         </Row>
 
       </Container>
+      <Backdrop
+        sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
+        open={open}
+       
+      >
+        <CircularProgress color="inherit" />
+      </Backdrop>
     </>
   );
 }

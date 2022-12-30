@@ -232,8 +232,8 @@ function Updateform(props) {
                   required
                   type="email"
                   placeholder="Last name"
-                 // value={props.email}
-                  defaultValue={props.email}
+                  value={props.email}
+                 defaultValue={props.email}
                   onChange={(e) => setMail(e.target.value)}
                 />
                 <Form.Control.Feedback>Looks good!</Form.Control.Feedback>

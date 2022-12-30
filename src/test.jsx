@@ -4,10 +4,8 @@ import Updateform from "./updateform";
 import { DataGrid, GridToolbar } from '@mui/x-data-grid';
 import { Box } from "@mui/material";
 import Button from '@mui/material/Button';
-import Backdrop from '@mui/material/Backdrop';
-import CircularProgress from '@mui/material/CircularProgress';
 
-function CompanyList() {
+function Test() {
   const [data, setdata] = useState([]);
   const [load, setLoad] = useState(false)
   const values = [true];
@@ -27,19 +25,12 @@ function CompanyList() {
   const [updateLongitude, setUpdateLongitude] = useState("")
   const [id, setId] = useState()
   /*---------------------props------------------------*/
-  const [open, setOpen] = useState(false);
-  const handleClose = () => {
-    setOpen(false);
-  };
-  const handleToggle = () => {
-    setOpen(!open);
-  };
 
   const columns = [
     {
       field: 'id',
       headerName: 'ID',
-      width: 70,
+      width: 100,
       headerClassName:
       'super-app-theme--header',
       headerAlign: 'center'
@@ -47,14 +38,14 @@ function CompanyList() {
     {
       field: 'contactname',
       headerName: 'Name',
-      width: 150,
+      width: 250,
       headerClassName: 'super-app-theme--header',
       headerAlign: 'center'
     },
     {
       field: 'email',
       headerName: 'Email',
-      width: 200,
+      width: 250,
       headerClassName: 'super-app-theme--header',
       headerAlign: 'center'
     },
@@ -68,26 +59,26 @@ function CompanyList() {
     {
       field: 'address',
       headerName: 'Address',
-      width: 500,
+      width: 250,
       headerClassName: 'super-app-theme--header',
       headerAlign: 'center'
     },
     {
       field: 'open',
       headerName: 'Open Time',
-      width: 100,
+      width: 130,
       headerClassName: 'super-app-theme--header',
       headerAlign: 'center'
     },
     {
       field: 'close',
       headerName: 'Close Time',
-      width: 100,headerClassName: 'super-app-theme--header',
+      width: 130,headerClassName: 'super-app-theme--header',
       headerAlign: 'center'
     },
     {
       field: 'Action',
-      width: 200,
+      width: 250,
       sortable: false,
       headerAlign: 'center',
       renderCell: (params) => {
@@ -155,24 +146,24 @@ function CompanyList() {
   }
 
   function getList() {
-    setOpen(!open);
     fetch("https://tomcat1.shiftescape.com/api/users").then((response) => {
       setLoad(false);
       response.json().then(((result) => {
         setdata(result);
-        setOpen(false);
       }))
     }).catch(e => {
-      
       console.log(e);
       setLoad(false);
     });
   }
 
+
+
   useEffect(() => {
     setLoad(true);
     getList();
   }, [id])
+
 
   return (
     <>
@@ -227,16 +218,8 @@ function CompanyList() {
 
         </Modal.Footer>
       </Modal>
-
-      <Backdrop
-        sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
-        open={open}
-       
-      >
-        <CircularProgress color="inherit" />
-      </Backdrop>
     </>
   )
 }
 
-export default CompanyList
+export default Test

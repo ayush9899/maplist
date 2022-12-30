@@ -1,7 +1,7 @@
 /*global google*/
 import React, { useState, useEffect, useRef } from 'react';
-import { Container, Button, Spinner } from 'react-bootstrap';
-//import Button from '@mui/material/Button';
+import { Container } from 'react-bootstrap';
+import Button from '@mui/material/Button';
 import Col from 'react-bootstrap/Col';
 import Form from 'react-bootstrap/Form';
 import InputGroup from 'react-bootstrap/InputGroup';
@@ -30,7 +30,6 @@ function Registration() {
   const [opens, setOpens] = useState(false);
   const [color, setColor] = useState("");
   const [message, setMessage] = useState("");
-  const [agree, setAgree] = useState(true);
 
 
   const handleClose = (event, reason) => {
@@ -41,8 +40,7 @@ function Registration() {
   };
 
   function sub() {
-    setAgree(true)
-   
+    
     var json = {
       "contactname": name,
       "email": email,
@@ -69,7 +67,7 @@ function Registration() {
     }).then((respons) => {
       setLoad(false);
       setOpens(true);
-      setMessage("You are successfully Register.")
+      setMessage("You are successgully Register.")
       setColor("success")
       respons.json().then((result) => {
 
@@ -86,35 +84,14 @@ function Registration() {
 
   }
 
-function checke(e){
-  if (e.target.checked) {
-    console.log(e.target.checked);
-    if (name == "" ||email == "" || password == "" || address == "" || open == "" || close == "" || dlatitude == "" || dlongitude == "" || compnay == "") {
-      alert("please complete the fill")
-      e.target.checked = false;  
-      
-    }else{
-      setAgree(false)
-    }
-  }
-}
-
 
   const handleSubmit = (event) => {
-
     const form = event.currentTarget;
     if (form.checkValidity() === false) {
-      event.preventDefault(); event.stopPropagation();
-
-    }else {
-      
-      //
+      event.preventDefault();
+      event.stopPropagation();
     }
-   if(!name === false && !email === false && !password === false && !address === false && !open === false && !close === false && !dlatitude === false && !dlongitude === false && !compnay === false && agree === false ){
-    sub()
-   }else{
-    
-   }
+
     setValidated(true);
   };
   // Javascript Map Call strat
@@ -238,7 +215,7 @@ function checke(e){
       <Row>
         <Col>
           <h1 className='mt-4 text-center'>This is Registration</h1>
-          <Form noValidate validated={validated} onSubmit={handleSubmit}>
+          <Form noValidate validated={validated} onSubmit={sub}>
             <Row className="mb-3">
               <Form.Group as={Col} md="4" controlId="validationCustom01">
 
@@ -247,7 +224,7 @@ function checke(e){
                   required
                   type="text"
                   placeholder="First name"
-                  defaultValue=""
+                  defaultValue="Mark"
                   onChange={(e) => setName(e.target.value)}
                 />
                 <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
@@ -257,8 +234,8 @@ function checke(e){
                 <Form.Control
                   required
                   type="email"
-                  placeholder="email"
-                  defaultValue=""
+                  placeholder="Last name"
+                  defaultValue="Otto"
                   onChange={(e) => setMail(e.target.value)}
                 />
                 <Form.Control.Feedback>Looks good!</Form.Control.Feedback>
@@ -280,6 +257,7 @@ function checke(e){
                 </InputGroup>
               </Form.Group>
             </Row>
+            {/*-------------------------------------------*/}
             <Row className="mb-3">
               <Form.Group as={Col} md="4" controlId="validationCustom03">
                 <Form.Label>Company Name</Form.Label>
@@ -308,6 +286,7 @@ function checke(e){
                 </Form.Control.Feedback>
               </Form.Group>
             </Row>
+            {/*-------------------------------------------*/}
             <Row>
               <Form.Group as={Col} md="12" controlId="validationCustom05">
                 <Form.Label>Address </Form.Label>
@@ -320,27 +299,23 @@ function checke(e){
                 <div id="map" style={{ width: "100%", height: "200px", borderRadius: "15px", marginTop: "15px", boxShadow: "0px 0px 5px #ddd" }}></div>
               </Col>
             </Row>
-
-
-
-
-            <Form.Group className="mb-3">
+             {/*-------------------------------------------*/}
+            {/* <Form.Group className="mt-4 mb-3">
               <Form.Check
+                id="checked"
                 required
                 label="Agree to terms and conditions"
                 feedback="You must agree before submitting."
                 feedbackType="invalid"
-                onChange={(e)=>checke(e)}
+                value="true"
+                onChange={(e) => setCheck(e.target.value)}
               />
-            </Form.Group>
-           
-             <Button onClick={handleSubmit}>
-             {
-              load && <Spinner animation="border" size="sm" /> 
-            }
-               <span>&nbsp;</span>Submit form
-             </Button>
-           
+            </Form.Group> */}
+            <Button variant="contained" type="submit" >
+              {load && (
+                <span className="spinner-border spinner-border-sm"></span>
+              )}
+              Submit form</Button>
           </Form>
         </Col>
       </Row>
