@@ -58,26 +58,26 @@ function Search() {
   var marlength = arryLocation.length;
 
   function searchMark() {
-  //   function getLocationS() {
-  //     if (navigator.geolocation) {
-  //       navigator.geolocation.getCurrentPosition(showPosition);
-  //     } else { 
-  //      console.log("Geolocation is not supported by this browser.")
-  //     }
-  //   }
+    function getLocationS() {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(showPosition);
+      } else { 
+       console.log("Geolocation is not supported by this browser.")
+      }
+    }
     
-  //   function showPosition(position) {
-  //     var plat = position.coords.latitude;
-  //     var plng = position.coords.longitude;
-  //     map.setCenter(new google.maps.LatLng(plat, plng));
-  //  //   new google.maps.Marker({position: { lat: plat, lng: plng },map,title: "Your Current Location",});
+    function showPosition(position) {
+      var plat = position.coords.latitude;
+      var plng = position.coords.longitude;
+      map.setCenter(new google.maps.LatLng(plat, plng));
+      new google.maps.Marker({position: { lat: plat, lng: plng },map,title: "Your Current Location",});
 
-  //   }
+    }
 	
-	//getLocationS()
+	getLocationS()
     var getMap = document.getElementById('map');
     var createMap = {
-      center: new google.maps.LatLng(maks.lat, maks.lng),
+     // center: new google.maps.LatLng(maks.lat, maks.lng),
       zoom: 10,
     };
 
