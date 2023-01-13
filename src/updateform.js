@@ -10,15 +10,15 @@ import Row from 'react-bootstrap/Row';
 function Updateform(props) {
 
   const [validated, setValidated] = useState(false);
-  const [name, setName] = useState("");
-  const [email, setMail] = useState("");
-  const [password, setPassword] = useState("");
-  const [compnay, setCompnany] = useState("");
-  const [address, setAddress] = useState("");
-  const [open, setOpen] = useState("");
-  const [close, setClose] = useState("")
-  const [dlatitude, setDlatitude] = useState("");
-  const [dlongitude, setDlongitude] = useState("");
+  const [name, setName] = useState(props.name);
+  const [email, setMail] = useState(props.email);
+  const [password, setPassword] = useState(props.password);
+  const [compnay, setCompnany] = useState(props.company);
+  const [address, setAddress] = useState(props.address);
+  const [open, setOpen] = useState(props.open);
+  const [close, setClose] = useState(props.close)
+  const [dlatitude, setDlatitude] = useState(props.latitude);
+  const [dlongitude, setDlongitude] = useState(props.longitude);
   const [load,setLoad] = useState(false);
   const [check,setCheck] = useState();
 

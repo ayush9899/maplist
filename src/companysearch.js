@@ -1,4 +1,5 @@
 /*global google*/
+import './App.css';
 import { useEffect, useRef, useState } from "react";
 import { Container, Row, Col, Button, Card } from "react-bootstrap";
 import { Form } from "react-bootstrap";
@@ -26,25 +27,25 @@ function Search() {
   }, []);
   // Get API Call
   useEffect(() => {
-     fetch(`http://65.20.74.140:8080/ReactJsGoogleMapWeb/api/users/page?address=`).then((response) => {
-        response.json().then((result) => {
-           console.log("search data  "+result);
-           setData(result)
-           setOpen(false);
-        })
-     })
+    fetch(`http://65.20.74.140:8080/ReactJsGoogleMapWeb/api/users/page?address=`).then((response) => {
+      response.json().then((result) => {
+        console.log("search data  " + result);
+        setData(result)
+        setOpen(false);
+      })
+    })
   }, [])
 
   async function searchWord(key) {
-     let result = await fetch(`http://65.20.74.140:8080/ReactJsGoogleMapWeb/api/users/page?address=${key}`);
-     result = await result.json();
-     setData(result)
+    let result = await fetch(`http://65.20.74.140:8080/ReactJsGoogleMapWeb/api/users/page?address=${key}`);
+    result = await result.json();
+    setData(result)
     console.log(result);
   }
-useEffect(()=>{searchWord()},[])
+  useEffect(() => { searchWord() }, [data])
 
 
-  var arryLocation = [{}];
+  var arryLocation = [];
 
   for (var i = 0; i < data.length; i++) {
     arryLocation.push({
@@ -52,78 +53,93 @@ useEffect(()=>{searchWord()},[])
       lng: parseFloat(data[i].longitude)
     })
   }
-//console.log("arryLocation", arryLocation)
+
+  var maks = arryLocation[1];
+  var marlength = arryLocation.length;
+
   function searchMark() {
-    // The location of Uluru
-   // console.log("arryLocation 222", arryLocation)
-    var maks = arryLocation[1];
-    const uluru = maks;
-    // The map, centered at Uluru
-    const map = new google.maps.Map(document.getElementById("map"), {
-      zoom: 11,
-      center: uluru,
-    });
-    // The marker, positioned at Uluru
-    const marker = new google.maps.Marker({
-      position: uluru,
-      map: map,
-    });
-var marlength = arryLocation.length;
-var dataMaps = data.map((row)=>row.id);
-var ids = ["ids38","ids47","ids49","ids62","ids63","ids64","ids65","ids66","ids67","ids68","ids69","ids70","ids71"]
-for(var i = 0; i < marlength; i++){
- 
-  console.log('arryLocation[i]',arryLocation[i])
-  new google.maps.Marker({
-    position: arryLocation[i],
-   title: data[i].company,
-   map:map
-  }).addListener('click', function(i){
-    for(var d = 0; d < ids.length; d++){
-      //console.log(ids[d]);
-      var cardbox = document.getElementsByClassName("cls");
-      var cls = cardbox[d].classList.contains("border-success");
-      if(cls == true){
-        console.log('cls is tru')
-        document.getElementById(ids[d]).classList.remove("border-success");
-      }else{
-        console.log('cls is false')
-        document.getElementById(ids[d]).classList.add("border-success");
+    function getLocationS() {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(showPosition);
+      } else { 
+       console.log("Geolocation is not supported by this browser.")
       }
-     // document.getElementById(ids[0]).classList.add("border-success");
     }
-alert(ids[i])
+    
+    function showPosition(position) {
+      var plat = position.coords.latitude;
+      var plng = position.coords.longitude;
+      map.setCenter(new google.maps.LatLng(plat, plng));
+   //   new google.maps.Marker({position: { lat: plat, lng: plng },map,title: "Your Current Location",});
 
+    }
+	
+	getLocationS()
+    var getMap = document.getElementById('map');
+    var createMap = {
+     // center: new google.maps.LatLng(maks.lat, maks.lng),
+      zoom: 10,
+    };
 
-  });
+    map = new google.maps.Map(getMap, createMap);
 
- // location.push({title: data[i].company,position: new google.maps.LatLng(arryLocation[i].lat,arryLocation[i].lng),map:map, animation: google.maps.Animation.DROP,})
-  
-}
+    for (var i = 0; i <= marlength; i++) {
 
+      var marker = new google.maps.Marker({
+        title: data[i].company,
+        position: new google.maps.LatLng(arryLocation[i].lat, arryLocation[i].lng),
+        map: map,
+        myID: data[i].id,
+      });
 
+      google.maps.event.addListener(marker, 'click', function () {
+
+        var cls = document.getElementsByClassName("border-success");
+        var clsLength = cls.length;
+
+        if (clsLength == 0) {
+          document.getElementById(`ids${this.myID}`).classList.add("border-success");
+        } else if (clsLength > 0) {
+          cls[0].classList.remove("border-success");
+          document.getElementById(`ids${this.myID}`).classList.add("border-success");
+        }
+
+        var scroll = document.getElementById("scroll");
+        var divOffset = document.getElementById(`ids${this.myID}`).offsetTop;
+
+        if (divOffset < 462) {
+          scroll.scrollTop = 0;
+        } else {
+          scroll.scrollTop = divOffset - 250;
+        }
+
+      });
+
+    }
 
   }
-  window.searchMark = searchMark;
+
 
   var map
   function getLocation(e) {
-    var getMap = document.getElementById('map');
-    var createMap = {
-      center: new google.maps.LatLng(e.lat, e.lng),
-      zoom: 10,
-    };
-    map = new google.maps.Map(getMap, createMap);
     var laLatLng = new google.maps.LatLng(e.lat, e.lng)
     map.panTo(laLatLng);
     map.setZoom(14);
+    window.setTimeout(function () {
+      map.setZoom(10);
+    }, 3000);
 
+    var clss = document.getElementsByClassName("border-success");
+        var clsLengths = clss.length;
 
-    new google.maps.Marker({
-      position: e,
-      map,
+        if (clsLengths == 0) {
+       
+          document.getElementById(`ids${e.id}`).classList.add("border-success");
+        } else if (clsLengths > 0) {
+          clss[0].classList.remove("border-success");
+          document.getElementById(`ids${e.id}`).classList.add("border-success");
+        }
 
-    });
 
   }
 
@@ -146,58 +162,45 @@ alert(ids[i])
 
   return (
     <>
-      <Container className="mt-5">
+      {/* <h1>Search Map</h1> */}
+      <Container fluid>
         <Row>
 
           <Col>
-            <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
+            <Form.Group className="mb-3 mt-5" controlId="exampleForm.ControlTextarea1">
               <Form.Label>Address</Form.Label>
-              <Form.Control id="search-input" className="controls" type="text" placeholder="Search Box" onChange={(e) => {searchWord(e.target.value) }} />
+              <Form.Control id="search-input" className="controls" type="text" placeholder="Search Box" onChange={(e) => { searchWord(e.target.value) }} />
             </Form.Group>
 
             <Row>
               <Col>
-                <div className="scroll" style={{height: "70vh", overflowX: "scroll"}}>
-                {
-                  data.map((item,key) =>
-                    <Card className="mt-3 cls" id={`ids${item.id}`}>
-                      <Card.Body>
-                        <Card.Title>{item.company}</Card.Title>
-                        <Card.Subtitle className="mb-2 text-muted">{item.contactname}</Card.Subtitle>
-                        <Card.Text>
-                          {item.address}
-                        </Card.Text>
-                        <Card.Link href={"mailto:" + item.email}>Email</Card.Link> <span>&nbsp;</span>
-                        <Button onClick={() => getLocation({ lat: parseFloat(item.latitude), lng: parseFloat(item.longitude) })}>Location</Button>
-                      </Card.Body>
-                    </Card>
-                  )
-                }
+                <div className="scroll" id="scroll" style={{ height: "75.1vh", overflowX: "scroll" }}>
+                  {
+                    data.map((item, key) =>
+                      <Card className="mt-3 cls" id={`ids${item.id}`}>
+                        <Card.Body>
+                          <Card.Title>{item.company}</Card.Title>
+                          <Card.Subtitle className="mb-2 text-muted">{item.contactname}</Card.Subtitle>
+                          <Card.Text>
+                            {item.address}<br />
+                            <b>Location:- {item.latitude},{item.longitude}</b>
+                          </Card.Text>
+                          <Card.Link href={"mailto:" + item.email}>Email</Card.Link> <span>&nbsp;</span>
+                          <Button onClick={() => getLocation({ lat: parseFloat(item.latitude), lng: parseFloat(item.longitude),id:item.id })}>Location</Button>
+                        </Card.Body>
+                      </Card>
+                    )
+                  }
 
                 </div>
-                {/* {
-                  data.map((item) =>
-                  search == item.company ?
-                    <Car d className="mt-3">
-                      <Card.Body>
-                        <Card.Title>{item.company}</Card.Title>
-                        <Card.Subtitle className="mb-2 text-muted">{item.contactname}</Card.Subtitle>
-                        <Card.Text>
-                          {item.address}
-                        </Card.Text>
-                        <Card.Link href={"mailto:" + item.email}>Email</Card.Link> <span>&nbsp;</span>
-                        <Button onClick={()=>getLocation({lat:parseFloat(item.latitude),lng:parseFloat(item.longitude)})}>Location</Button>
-                      </Card.Body>
-                    </Card>
-                     : null
-                  )
-                } */}
+
               </Col>
             </Row>
           </Col>
           <Col>
 
-            <div id="map" style={{ width: "100%", height: "400px", }}></div>
+            <div id="map" style={{ width: "100%", height: "100%", }}></div>
+
           </Col>
         </Row>
 
@@ -205,7 +208,7 @@ alert(ids[i])
       <Backdrop
         sx={{ color: '#fff', zIndex: (theme) => theme.zIndex.drawer + 1 }}
         open={open}
-       
+
       >
         <CircularProgress color="inherit" />
       </Backdrop>

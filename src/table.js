@@ -90,7 +90,7 @@ function SearchMap() {
 
         var scroll = document.getElementById("scroll");
         var divOffset = document.getElementById(`ids${this.myID}`).offsetTop;
-console.log("divOffset "+divOffset)
+
         if (divOffset < 462) {
           scroll.scrollTop = 0;
         } else {
@@ -134,19 +134,19 @@ console.log("divOffset "+divOffset)
 
   return (
     <>
-      <h1>Search Map</h1>
-      <Container className="mt-5">
+      {/* <h1>Search Map</h1> */}
+      <Container fluid>
         <Row>
 
           <Col>
-            <Form.Group className="mb-3" controlId="exampleForm.ControlTextarea1">
+            <Form.Group className="mb-3 mt-5" controlId="exampleForm.ControlTextarea1">
               <Form.Label>Address</Form.Label>
               <Form.Control id="search-input" className="controls" type="text" placeholder="Search Box" onChange={(e) => { searchWord(e.target.value) }} />
             </Form.Group>
 
             <Row>
               <Col>
-                <div className="scroll" id="scroll" style={{ height: "70vh", overflowX: "scroll" }}>
+                <div className="scroll" id="scroll" style={{ height: "75.1vh", overflowX: "scroll" }}>
                   {
                     data.map((item, key) =>
                       <Card className="mt-3 cls" id={`ids${item.id}`}>
@@ -171,7 +171,7 @@ console.log("divOffset "+divOffset)
           </Col>
           <Col>
 
-            <div id="map" style={{ width: "100%", height: "400px", }}></div>
+            <div id="map" style={{ width: "100%", height: "100%", }}></div>
 
           </Col>
         </Row>

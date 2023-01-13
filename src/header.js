@@ -13,7 +13,7 @@ function Header(){
             <Link className='nav-link' to="/">Registration</Link>
             <Link className='nav-link' to="/companyList">Company List</Link>
             <Link className='nav-link' to="/search">Company Search</Link>
-            <Link className='nav-link' to="/searchMap">Search Map</Link>
+            <Link className='nav-link' to="/login">Login</Link>
            
            </Nav>
         </Container>

@@ -31,6 +31,8 @@ function Registration() {
   const [color, setColor] = useState("");
   const [message, setMessage] = useState("");
   const [agree, setAgree] = useState(true);
+  const [currentlat,setCurrentlat] = useState()
+  const [currentlng,setCurrentlng] = useState()
 
 
   const handleClose = (event, reason) => {
@@ -138,11 +140,27 @@ function checke(e){
     * SPDX-License-Identifier: Apache-2.0
     */
   function initAutocomplete() {
+
+    function getLocation() {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(showPosition);
+      } else { 
+       console.log("Geolocation is not supported by this browser.")
+      }
+    }
+    
+    function showPosition(position) {
+      var plat = position.coords.latitude;
+      var plng = position.coords.longitude;
+      map.setCenter(new google.maps.LatLng(plat, plng));
+      new google.maps.Marker({position: { lat: plat, lng: plng },map,title: "Your Current Location",});
+
+    }
+    
+    getLocation()
+
     const map = new google.maps.Map(document.getElementById("map"), {
-      center: {
-        lat: -33.8688,
-        lng: 151.2195
-      },
+      
       zoom: 13,
       mapTypeId: "roadmap",
     });
@@ -233,7 +251,7 @@ function checke(e){
 
   // Javascript Map Call strat
   return (<>
-
+<div id="demo"></div>
     <Container>
       <Row>
         <Col>
